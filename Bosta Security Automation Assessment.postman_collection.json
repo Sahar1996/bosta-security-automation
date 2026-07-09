@@ -1,0 +1,956 @@
+{
+  "info": {
+    "_postman_id": "5da614bf-6a82-4f77-955c-f876626cf364",
+    "name": "Bosta Security Automation Assessment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "6501727"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Generate Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "let response = pm.response.json();\r",
+                  "\r",
+                  "pm.environment.set(\"token\", response.token);\r",
+                  "\r",
+                  "pm.test(\"Token exists\", function () {\r",
+                  "    pm.expect(response.token).to.not.be.empty;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/users/generate-token-for-interview-task",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "generate-token-for-interview-task"
+              ]
+            },
+            "description": "Purpose:  \nGenerate a valid access token to authenticate subsequent API requests.\n\nExpected Result:  \nA valid token is returned and stored in the environment for reuse."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Create Pickup",
+      "item": [
+        {
+          "name": "SEC_001_Invalid_Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Request should not be authorized\", function () {\r",
+                  "    pm.response.to.have.status(401);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json, text/plain, */*"
+              },
+              {
+                "key": "accept-language",
+                "value": "en"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              },
+              {
+                "key": "origin",
+                "value": "https://stg-business.bosta.co"
+              },
+              {
+                "key": "priority",
+                "value": "u=1, i"
+              },
+              {
+                "key": "referer",
+                "value": "https://stg-business.bosta.co/"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              },
+              {
+                "key": "sec-fetch-dest",
+                "value": "empty"
+              },
+              {
+                "key": "sec-fetch-mode",
+                "value": "cors"
+              },
+              {
+                "key": "sec-fetch-site",
+                "value": "same-site"
+              },
+              {
+                "key": "user-agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,"
+              },
+              {
+                "key": "x-device-fingerprint",
+                "value": "{{fingerprint}}"
+              },
+              {
+                "key": "x-device-id",
+                "value": "{{deviceId}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "1234"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"businessLocationId\": \"MFqXsoFhxO\",\r\n  \"contactPerson\": {\r\n    \"_id\": \"_sCFBrHGi\",\r\n    \"name\": \"test name\",\r\n    \"email\": \"amira.mosa+991^@bosta.co\",\r\n    \"phone\": \"+201055592829\"\r\n  },\r\n  \"scheduledDate\": \"2027-11-7\",\r\n  \"numberOfParcels\": \"3\",\r\n  \"hasBigItems\": false,\r\n  \"repeatedData\": {\r\n    \"repeatedType\": \"One Time\"\r\n  },\r\n  \"creationSrc\": \"Web\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/pickups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pickups"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'https://stg-app.bosta.co/api/v2/pickups' \\\r\n--header 'accept: application/json, text/plain, */*' \\\r\n--header 'accept-language: en' \\\r\n--header 'content-type: application/json' \\\r\n--header 'origin: https://stg-business.bosta.co' \\\r\n--header 'priority: u=1, i' \\\r\n--header 'referer: https://stg-business.bosta.co/' \\\r\n--header 'sec-ch-ua: \"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"' \\\r\n--header 'sec-ch-ua-mobile: ?0' \\\r\n--header 'sec-ch-ua-platform: \"Windows\"' \\\r\n--header 'sec-fetch-dest: empty' \\\r\n--header 'sec-fetch-mode: cors' \\\r\n--header 'sec-fetch-site: same-site' \\\r\n--header 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,\r\nlike Gecko) Chrome/137.0.0.0 Safari/537.36' \\\r\n--header 'x-device-fingerprint: 1hgtilh' \\\r\n--header 'x-device-id: 01JV70TKSFGV9Z1QWEYV3N5APC' \\\r\n--header 'Authorization:\r\nbca27763f5f30353ba0ee3d2ebd8951994f5016e269bbd781798e2884274d631' \\\r\n--data-raw\r\n'{\"businessLocationId\":\"MFqXsoFhxO\",\"contactPerson\":{\"_id\":\"_sCFBrHGi\",\"name\":\"test\r\nname\",\"email\":\"amira.mosa+991^@bosta.co\",\"phone\":\"+201055592829\"},\"scheduledDate\":\"202\r\n5-06-30\",\"numberOfParcels\":\"3\",\"hasBigItems\":false,\"repeatedData\":{\"repeatedType\":\"One\r\nTime\"},\"creationSrc\":\"Web\"}'"
+          },
+          "response": []
+        },
+        {
+          "name": "SEC_002_SQL_Injection",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"SQL Injection should be blocked\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json, text/plain, */*"
+              },
+              {
+                "key": "accept-language",
+                "value": "en"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              },
+              {
+                "key": "origin",
+                "value": "https://stg-business.bosta.co"
+              },
+              {
+                "key": "priority",
+                "value": "u=1, i"
+              },
+              {
+                "key": "referer",
+                "value": "https://stg-business.bosta.co/"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              },
+              {
+                "key": "sec-fetch-dest",
+                "value": "empty"
+              },
+              {
+                "key": "sec-fetch-mode",
+                "value": "cors"
+              },
+              {
+                "key": "sec-fetch-site",
+                "value": "same-site"
+              },
+              {
+                "key": "user-agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,"
+              },
+              {
+                "key": "x-device-fingerprint",
+                "value": "{{fingerprint}}"
+              },
+              {
+                "key": "x-device-id",
+                "value": "{{deviceId}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"businessLocationId\": \"' OR '1'='1\",\r\n  \"contactPerson\": {\r\n    \"_id\": \"_sCFBrHGi\",\r\n    \"name\": \"test name\",\r\n    \"email\": \"amira.mosa+991^@bosta.co\",\r\n    \"phone\": \"+201055592829\"\r\n  },\r\n  \"scheduledDate\": \"2028-4-10\",\r\n  \"numberOfParcels\": \"3\",\r\n  \"hasBigItems\": false,\r\n  \"repeatedData\": {\r\n    \"repeatedType\": \"One Time\"\r\n  },\r\n  \"creationSrc\": \"Web\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/pickups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pickups"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'https://stg-app.bosta.co/api/v2/pickups' \\\r\n--header 'accept: application/json, text/plain, */*' \\\r\n--header 'accept-language: en' \\\r\n--header 'content-type: application/json' \\\r\n--header 'origin: https://stg-business.bosta.co' \\\r\n--header 'priority: u=1, i' \\\r\n--header 'referer: https://stg-business.bosta.co/' \\\r\n--header 'sec-ch-ua: \"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"' \\\r\n--header 'sec-ch-ua-mobile: ?0' \\\r\n--header 'sec-ch-ua-platform: \"Windows\"' \\\r\n--header 'sec-fetch-dest: empty' \\\r\n--header 'sec-fetch-mode: cors' \\\r\n--header 'sec-fetch-site: same-site' \\\r\n--header 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,\r\nlike Gecko) Chrome/137.0.0.0 Safari/537.36' \\\r\n--header 'x-device-fingerprint: 1hgtilh' \\\r\n--header 'x-device-id: 01JV70TKSFGV9Z1QWEYV3N5APC' \\\r\n--header 'Authorization:\r\nbca27763f5f30353ba0ee3d2ebd8951994f5016e269bbd781798e2884274d631' \\\r\n--data-raw\r\n'{\"businessLocationId\":\"MFqXsoFhxO\",\"contactPerson\":{\"_id\":\"_sCFBrHGi\",\"name\":\"test\r\nname\",\"email\":\"amira.mosa+991^@bosta.co\",\"phone\":\"+201055592829\"},\"scheduledDate\":\"202\r\n5-06-30\",\"numberOfParcels\":\"3\",\"hasBigItems\":false,\"repeatedData\":{\"repeatedType\":\"One\r\nTime\"},\"creationSrc\":\"Web\"}'"
+          },
+          "response": []
+        },
+        {
+          "name": "SEC_003_Missing_Authorization",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Authorization is requiredd\", function () {\r",
+                  "    pm.response.to.have.status(401);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json, text/plain, */*"
+              },
+              {
+                "key": "accept-language",
+                "value": "en"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              },
+              {
+                "key": "origin",
+                "value": "https://stg-business.bosta.co"
+              },
+              {
+                "key": "priority",
+                "value": "u=1, i"
+              },
+              {
+                "key": "referer",
+                "value": "https://stg-business.bosta.co/"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              },
+              {
+                "key": "sec-fetch-dest",
+                "value": "empty"
+              },
+              {
+                "key": "sec-fetch-mode",
+                "value": "cors"
+              },
+              {
+                "key": "sec-fetch-site",
+                "value": "same-site"
+              },
+              {
+                "key": "user-agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,"
+              },
+              {
+                "key": "x-device-fingerprint",
+                "value": "{{fingerprint}}"
+              },
+              {
+                "key": "x-device-id",
+                "value": "{{deviceId}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"businessLocationId\": \"MFqXsoFhxO\",\r\n  \"contactPerson\": {\r\n    \"_id\": \"_sCFBrHGi\",\r\n    \"name\": \"test name\",\r\n    \"email\": \"amira.mosa+991^@bosta.co\",\r\n    \"phone\": \"+201055592829\"\r\n  },\r\n  \"scheduledDate\": \"2029-12-30\",\r\n  \"numberOfParcels\": \"3\",\r\n  \"hasBigItems\": false,\r\n  \"repeatedData\": {\r\n    \"repeatedType\": \"One Time\"\r\n  },\r\n  \"creationSrc\": \"Web\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/pickups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pickups"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'https://stg-app.bosta.co/api/v2/pickups' \\\r\n--header 'accept: application/json, text/plain, */*' \\\r\n--header 'accept-language: en' \\\r\n--header 'content-type: application/json' \\\r\n--header 'origin: https://stg-business.bosta.co' \\\r\n--header 'priority: u=1, i' \\\r\n--header 'referer: https://stg-business.bosta.co/' \\\r\n--header 'sec-ch-ua: \"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"' \\\r\n--header 'sec-ch-ua-mobile: ?0' \\\r\n--header 'sec-ch-ua-platform: \"Windows\"' \\\r\n--header 'sec-fetch-dest: empty' \\\r\n--header 'sec-fetch-mode: cors' \\\r\n--header 'sec-fetch-site: same-site' \\\r\n--header 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,\r\nlike Gecko) Chrome/137.0.0.0 Safari/537.36' \\\r\n--header 'x-device-fingerprint: 1hgtilh' \\\r\n--header 'x-device-id: 01JV70TKSFGV9Z1QWEYV3N5APC' \\\r\n--header 'Authorization:\r\nbca27763f5f30353ba0ee3d2ebd8951994f5016e269bbd781798e2884274d631' \\\r\n--data-raw\r\n'{\"businessLocationId\":\"MFqXsoFhxO\",\"contactPerson\":{\"_id\":\"_sCFBrHGi\",\"name\":\"test\r\nname\",\"email\":\"amira.mosa+991^@bosta.co\",\"phone\":\"+201055592829\"},\"scheduledDate\":\"202\r\n5-06-30\",\"numberOfParcels\":\"3\",\"hasBigItems\":false,\"repeatedData\":{\"repeatedType\":\"One\r\nTime\"},\"creationSrc\":\"Web\"}'"
+          },
+          "response": []
+        },
+        {
+          "name": "SEC_004_Malicious_Input",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"API should reject malicious input\", function () {\r",
+                  "    pm.expect(pm.response.code).to.eql(400);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should not expose sensitive information\", function () {\r",
+                  "    const response = pm.response.text();\r",
+                  "\r",
+                  "    pm.expect(response).to.not.include(\"Exception\");\r",
+                  "    pm.expect(response).to.not.include(\"SQLException\");\r",
+                  "    pm.expect(response).to.not.include(\"stack\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json, text/plain, */*"
+              },
+              {
+                "key": "accept-language",
+                "value": "en"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              },
+              {
+                "key": "origin",
+                "value": "https://stg-business.bosta.co"
+              },
+              {
+                "key": "priority",
+                "value": "u=1, i"
+              },
+              {
+                "key": "referer",
+                "value": "https://stg-business.bosta.co/"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              },
+              {
+                "key": "sec-fetch-dest",
+                "value": "empty"
+              },
+              {
+                "key": "sec-fetch-mode",
+                "value": "cors"
+              },
+              {
+                "key": "sec-fetch-site",
+                "value": "same-site"
+              },
+              {
+                "key": "user-agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,"
+              },
+              {
+                "key": "x-device-fingerprint",
+                "value": "{{fingerprint}}"
+              },
+              {
+                "key": "x-device-id",
+                "value": "{{deviceId}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"businessLocationId\": \"MFqXsoFhxO\",\r\n  \"contactPerson\": {\r\n    \"_id\": \"_sCFBrHGi\",\r\n    \"name\": \"test name\",\r\n    \"email\": \"amira.mosa+991^@bosta.co\",\r\n    \"phone\": \"+201055592829\"\r\n  },\r\n  \"scheduledDate\": \"2030-10-8\",\r\n  \"numberOfParcels\": \"-3\",\r\n  \"hasBigItems\": false,\r\n  \"repeatedData\": {\r\n    \"repeatedType\": \"One Time\"\r\n  },\r\n  \"creationSrc\": \"Web\",\r\n  \"isAdmin\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/pickups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "pickups"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'https://stg-app.bosta.co/api/v2/pickups' \\\r\n--header 'accept: application/json, text/plain, */*' \\\r\n--header 'accept-language: en' \\\r\n--header 'content-type: application/json' \\\r\n--header 'origin: https://stg-business.bosta.co' \\\r\n--header 'priority: u=1, i' \\\r\n--header 'referer: https://stg-business.bosta.co/' \\\r\n--header 'sec-ch-ua: \"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"' \\\r\n--header 'sec-ch-ua-mobile: ?0' \\\r\n--header 'sec-ch-ua-platform: \"Windows\"' \\\r\n--header 'sec-fetch-dest: empty' \\\r\n--header 'sec-fetch-mode: cors' \\\r\n--header 'sec-fetch-site: same-site' \\\r\n--header 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,\r\nlike Gecko) Chrome/137.0.0.0 Safari/537.36' \\\r\n--header 'x-device-fingerprint: 1hgtilh' \\\r\n--header 'x-device-id: 01JV70TKSFGV9Z1QWEYV3N5APC' \\\r\n--header 'Authorization:\r\nbca27763f5f30353ba0ee3d2ebd8951994f5016e269bbd781798e2884274d631' \\\r\n--data-raw\r\n'{\"businessLocationId\":\"MFqXsoFhxO\",\"contactPerson\":{\"_id\":\"_sCFBrHGi\",\"name\":\"test\r\nname\",\"email\":\"amira.mosa+991^@bosta.co\",\"phone\":\"+201055592829\"},\"scheduledDate\":\"202\r\n5-06-30\",\"numberOfParcels\":\"3\",\"hasBigItems\":false,\"repeatedData\":{\"repeatedType\":\"One\r\nTime\"},\"creationSrc\":\"Web\"}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Update Bank Info",
+      "item": [
+        {
+          "name": "SEC_001_Invalid_Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Request should not be authorized\", function () {\r",
+                  "    pm.response.to.have.status(401);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-device-fingerprint",
+                "value": "{{fingerprint}}",
+                "type": "text"
+              },
+              {
+                "key": "x-device-id",
+                "value": "{{deviceId}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "123",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"bankInfo\": {\r\n    \"beneficiaryName\": \"test name\",\r\n    \"bankName\": \"NBG - البنك الأهلي اليوناني مصر\",\r\n    \"accountNumber\": \"9876543210123456\",\r\n    \"ibanNumber\": \"EG380019000500000000263180002\"\r\n  },\r\n  \"paymentInfoOtp\": \"1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/businesses/add-bank-info",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "businesses",
+                "add-bank-info"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SEC_002_Invalid_OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Invalid OTP should be rejected\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-device-fingerprint",
+                "value": "{{fingerprint}}",
+                "type": "text"
+              },
+              {
+                "key": "x-device-id",
+                "value": "{{deviceId}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"bankInfo\": {\r\n    \"beneficiaryName\": \"test name\",\r\n    \"bankName\": \"NBG - البنك الأهلي اليوناني مصر\",\r\n    \"accountNumber\": \"9876543210123456\",\r\n    \"ibanNumber\": \"EG380019000500000000263180002\"\r\n  },\r\n  \"paymentInfoOtp\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/businesses/add-bank-info",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "businesses",
+                "add-bank-info"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SEC_003_SQL_Injection",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"API should handle SQL injection safely\", function () {\r",
+                  "    pm.expect(pm.response.code).to.not.equal(500);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-device-fingerprint",
+                "value": "{{fingerprint}}",
+                "type": "text"
+              },
+              {
+                "key": "x-device-id",
+                "value": "{{deviceId}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"bankInfo\": {\r\n    \"beneficiaryName\": \"' OR 1=1 --\",\r\n    \"bankName\": \"NBG - البنك الأهلي اليوناني مصر\",\r\n    \"accountNumber\": \"9876543210123456\",\r\n    \"ibanNumber\": \"EG380019000500000000263180002\"\r\n  },\r\n  \"paymentInfoOtp\": \"1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/businesses/add-bank-info",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "businesses",
+                "add-bank-info"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Forget Password",
+      "item": [
+        {
+          "name": "SEC_001_Email_Enumeration",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json, text/plain, */*"
+              },
+              {
+                "key": "accept-language",
+                "value": "en"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              },
+              {
+                "key": "origin",
+                "value": "https://stg-business.bosta.co"
+              },
+              {
+                "key": "priority",
+                "value": "u=1, i"
+              },
+              {
+                "key": "referer",
+                "value": "https://stg-business.bosta.co/"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              },
+              {
+                "key": "sec-fetch-dest",
+                "value": "empty"
+              },
+              {
+                "key": "sec-fetch-mode",
+                "value": "cors"
+              },
+              {
+                "key": "sec-fetch-site",
+                "value": "same-site"
+              },
+              {
+                "key": "user-agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,"
+              },
+              {
+                "key": "x-device-id",
+                "value": "{{deviceId}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\":\"idontexist@test.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/users/forget-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "forget-password"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'https://stg-app.bosta.co/api/v2/users/forget-password' \\\n--header 'accept: application/json, text/plain, */*' \\\n--header 'accept-language: en' \\\n--header 'content-type: application/json' \\\n--header 'origin: https://stg-business.bosta.co' \\\n--header 'priority: u=1, i' \\\n--header 'referer: https://stg-business.bosta.co/' \\\n--header 'sec-ch-ua: \"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"' \\\n--header 'sec-ch-ua-mobile: ?0' \\\n--header 'sec-ch-ua-platform: \"Windows\"' \\\n--header 'sec-fetch-dest: empty' \\\n--header 'sec-fetch-mode: cors' \\\n--header 'sec-fetch-site: same-site' \\\n--header 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,\nlike Gecko) Chrome/137.0.0.0 Safari/537.36' \\\n--header 'x-device-id: 01JV70TKSFGV9Z1QWEYV3N5APC' \\\n--header 'Authorization:\nbca27763f5f30353ba0ee3d2ebd8951994f5016e269bbd781798e2884274d631' \\\n--data-raw '{\"email\":\"amira.mosa+991^@bosta.co\"}'"
+          },
+          "response": []
+        },
+        {
+          "name": "SEC_002_Malicious_Input",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"API handles malicious input safely\", function () {\r",
+                  "    pm.expect(pm.response.code).to.not.equal(500);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"No sensitive error details are exposed\", function () {\r",
+                  "    const responseText = pm.response.text();\r",
+                  "\r",
+                  "    pm.expect(responseText).to.not.include(\"stack\");\r",
+                  "    pm.expect(responseText).to.not.include(\"SQLException\");\r",
+                  "    pm.expect(responseText).to.not.include(\"Exception\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json, text/plain, */*"
+              },
+              {
+                "key": "accept-language",
+                "value": "en"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              },
+              {
+                "key": "origin",
+                "value": "https://stg-business.bosta.co"
+              },
+              {
+                "key": "priority",
+                "value": "u=1, i"
+              },
+              {
+                "key": "referer",
+                "value": "https://stg-business.bosta.co/"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              },
+              {
+                "key": "sec-fetch-dest",
+                "value": "empty"
+              },
+              {
+                "key": "sec-fetch-mode",
+                "value": "cors"
+              },
+              {
+                "key": "sec-fetch-site",
+                "value": "same-site"
+              },
+              {
+                "key": "user-agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,"
+              },
+              {
+                "key": "x-device-id",
+                "value": "{{deviceId}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"' OR 1=1 --<script>alert('xss')</script>@test.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/users/forget-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "forget-password"
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'https://stg-app.bosta.co/api/v2/users/forget-password' \\\n--header 'accept: application/json, text/plain, */*' \\\n--header 'accept-language: en' \\\n--header 'content-type: application/json' \\\n--header 'origin: https://stg-business.bosta.co' \\\n--header 'priority: u=1, i' \\\n--header 'referer: https://stg-business.bosta.co/' \\\n--header 'sec-ch-ua: \"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"' \\\n--header 'sec-ch-ua-mobile: ?0' \\\n--header 'sec-ch-ua-platform: \"Windows\"' \\\n--header 'sec-fetch-dest: empty' \\\n--header 'sec-fetch-mode: cors' \\\n--header 'sec-fetch-site: same-site' \\\n--header 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,\nlike Gecko) Chrome/137.0.0.0 Safari/537.36' \\\n--header 'x-device-id: 01JV70TKSFGV9Z1QWEYV3N5APC' \\\n--header 'Authorization:\nbca27763f5f30353ba0ee3d2ebd8951994f5016e269bbd781798e2884274d631' \\\n--data-raw '{\"email\":\"amira.mosa+991^@bosta.co\"}'"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
